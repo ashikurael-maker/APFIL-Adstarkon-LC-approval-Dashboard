@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Capex Dashboard – AD*Starkon Replacement</title>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+    <style>
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+        body {
+            background: #f4f7fc;
+            padding: 20px;
+            color: #1e293b;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            padding: 30px 30px 40px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+            border-bottom: 2px solid #e9edf4;
+            padding-bottom: 20px;
+        }
+        .header h1 {
+            font-weight: 600;
+            font-size: 28px;
+            letter-spacing: -0.3px;
+            background: linear-gradient(145deg, #0b2a4a, #1a4a7a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header .sub {
+            font-size: 14px;
+            color: #5e6f8d;
+            background: #f0f4fa;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-weight: 500;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e9edf4;
+            padding-bottom: 2px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #5e6f8d;
+            border-radius: 40px 40px 0 0;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .tab-btn:hover {
+            background: #f0f4fa;
+            color: #0b2a4a;
+        }
+        .tab-btn.active {
+            color: #0b2a4a;
+            background: #e9edf4;
+        }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 20%;
+            right: 20%;
+            height: 3px;
+            background: #1a4a7a;
+            border-radius: 4px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fade 0.3s ease;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fade {
+            from {
+                opacity: 0.3;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Cards */
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .metric-card {
+            background: #f8faff;
+            border-radius: 20px;
+            padding: 18px 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            border: 1px solid #eef2f8;
+            transition: 0.15s;
+        }
+        .metric-card:hover {
+            border-color: #cbd5e1;
+        }
+        .metric-card .label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #5e6f8d;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+        .metric-card .value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-top: 6px;
+            color: #0b2a4a;
+        }
+        .metric-card .value small {
+            font-size: 14px;
+            font-weight: 400;
+            color: #5e6f8d;
+            margin-left: 4px;
+        }
+        .metric-card .change {
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+        .positive {
+            color: #0f7b3e;
+        }
+        .negative {
+            color: #b91c1c;
+        }
+
+        /* Two-column layout for charts */
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+        .row.three {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        @media (max-width: 900px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+            .row.three {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-box {
+            background: #fafcff;
+            border-radius: 20px;
+            padding: 20px 20px 10px;
+            border: 1px solid #eef2f8;
+        }
+        .chart-box h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1e293b;
+        }
+        .chart-box canvas {
+            max-height: 220px;
+            max-width: 100%;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            margin: 20px 0 10px;
+            border-radius: 16px;
+            border: 1px solid #eef2f8;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            background: white;
+        }
+        th {
+            background: #f1f6fd;
+            color: #1e293b;
+            font-weight: 600;
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 2px solid #dce3ec;
+        }
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #eef2f8;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .highlight {
+            background: #f0f7ff;
+        }
+
+        .note {
+            font-size: 13px;
+            color: #5e6f8d;
+            margin-top: 16px;
+            border-top: 1px solid #e9edf4;
+            padding-top: 16px;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 13px;
+            color: #7e8fa8;
+            border-top: 1px solid #e9edf4;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>⚙️ AD*Starkon 60 → SX NEO 140</h1>
+            <span class="sub">Capex Investment Decision · 2026</span>
+        </div>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="tab1">📊 Comparison</button>
+            <button class="tab-btn" data-tab="tab2">💰 ROI Analysis</button>
+            <button class="tab-btn" data-tab="tab3">📦 Bag Processing</button>
+        </div>
+
+        <!-- ================== TAB 1: COMPARISON ================== -->
+        <div id="tab1" class="tab-content active">
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="label">Production (24h)</div>
+                    <div class="value">138k <small>→</small> 171k</div>
+                    <div class="change positive">+24%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">Power / Month</div>
+                    <div class="value">624k <small>→</small> 408k</div>
+                    <div class="change positive">-34.6%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">Machines</div>
+                    <div class="value">2 <small>→</small> 1</div>
+                    <div class="change positive">-50%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">Floor Space</div>
+                    <div class="value">280 <small>→</small> 140</div>
+                    <div class="change positive">-50%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">kW / 1000 Bags</div>
+                    <div class="value">18.1 <small>→</small> 9.5</div>
+                    <div class="change positive">-47.4%</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="chart-box">
+                    <h3>Monthly Power Cost (BDT)</h3>
+                    <canvas id="powerCostChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Daily Production (Bags)</h3>
+                    <canvas id="productionChart"></canvas>
+                </div>
+            </div>
+            <div class="row">
+                <div class="chart-box">
+                    <h3>Power Consumption per 1000 Bags (kW)</h3>
+                    <canvas id="powerPerBagChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Output per Person per Hour</h3>
+                    <canvas id="personOutputChart"></canvas>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Parameter</th><th>Old (2×AD*Starkon 60)</th><th>New (1×SX NEO 140)</th><th>Change</th></tr></thead>
+                    <tbody>
+                        <tr><td>Connecting Load</td><td>144 KVA</td><td>105 KVA</td><td class="positive">-39 KVA</td></tr>
+                        <tr><td>Running Load / hour</td><td>104 kW</td><td>68 kW</td><td class="positive">-36 kW</td></tr>
+                        <tr><td>Line Speed</td><td>120 bags/min</td><td>140 bags/min</td><td class="positive">+20</td></tr>
+                        <tr><td>Avg. Efficiency</td><td>0.80</td><td>0.85</td><td class="positive">+0.05</td></tr>
+                        <tr><td>Annual Power (40M bags)</td><td>724,000 kW</td><td>380,800 kW</td><td class="positive">-343,200 kW</td></tr>
+                        <tr><td>Manpower / machine / day</td><td>26</td><td>26</td><td>—</td></tr>
+                        <tr><td>Output bags / sqm / hour</td><td>41</td><td>51</td><td class="positive">+10</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="note">* All financial figures in BDT (Bangladeshi Taka). Data based on provided Excel.</div>
+        </div>
+
+        <!-- ================== TAB 2: ROI ================== -->
+        <div id="tab2" class="tab-content">
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="label">Investment</div>
+                    <div class="value">123.7M <small>BDT</small></div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">Annual Savings</div>
+                    <div class="value">9.41M <small>BDT</small></div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">ROI</div>
+                    <div class="value">7.38<small>%</small></div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">Payback Period</div>
+                    <div class="value">13.1 <small>Years</small></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="chart-box">
+                    <h3>Annual Savings Breakdown</h3>
+                    <canvas id="savingsPieChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Annual Power Cost Comparison</h3>
+                    <canvas id="annualPowerChart"></canvas>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Item</th><th>Old Setup</th><th>New Setup</th><th>Savings</th></tr></thead>
+                    <tbody>
+                        <tr><td>Power Cost / Year</td><td>7,488,000 BDT</td><td>4,896,000 BDT</td><td class="positive">2,592,000 BDT</td></tr>
+                        <tr><td>Maintenance Cost / Year</td><td>15,146,772 BDT</td><td>8,330,725 BDT</td><td class="positive">6,816,047 BDT</td></tr>
+                        <tr class="highlight"><td><strong>Total Annual Savings</strong></td><td></td><td></td><td><strong>9,408,047 BDT</strong></td></tr>
+                        <tr><td>Investment</td><td></td><td>123,685,000 BDT</td><td></td></tr>
+                        <tr><td>ROI</td><td></td><td colspan="2"><strong>7.38%</strong></td></tr>
+                        <tr><td>Payback Period</td><td></td><td colspan="2"><strong>≈13.1 Years</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="note">Maintenance saving estimated at 45% reduction. ROI = (Annual Savings × 100) ÷ Investment.</div>
+        </div>
+
+        <!-- ================== TAB 3: BAG PROCESSING ================== -->
+        <div id="tab3" class="tab-content">
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="label">Bag Speed</div>
+                    <div class="value">120 <small>→</small> 140</div>
+                    <div class="change positive">+16.7%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">Operators (3 shifts)</div>
+                    <div class="value">29 <small>→</small> 21</div>
+                    <div class="change positive">-8 Persons</div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">Annual Manpower Saving</div>
+                    <div class="value">1.01M <small>BDT</small></div>
+                </div>
+                <div class="metric-card">
+                    <div class="label">Floor Space Saved</div>
+                    <div class="value">140 <small>sqm</small></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="chart-box">
+                    <h3>Operators &amp; Bag Checkers per Shift</h3>
+                    <canvas id="manpowerChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Production per Machine</h3>
+                    <canvas id="productionPerMachineChart"></canvas>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Section</th><th>Parameter</th><th>Before (2 Old)</th><th>After (1 New)</th><th>Impact</th></tr></thead>
+                    <tbody>
+                        <tr><td>AD*KON</td><td>Bags / min</td><td>120</td><td>140</td><td class="positive">+20</td></tr>
+                        <tr><td>AD*KON</td><td>No. of Machines</td><td>2</td><td>1</td><td class="positive">-1</td></tr>
+                        <tr><td>AD*KON</td><td>Operator &amp; Bag Checker (3 shifts)</td><td>29</td><td>21</td><td class="positive">-8</td></tr>
+                        <tr><td>AD*KON</td><td>Direct Saving (Yearly)</td><td>—</td><td>1,008,000 BDT</td><td class="positive">+1.01M BDT</td></tr>
+                        <tr><td>AD*KON</td><td>Investment</td><td>—</td><td>123,685,000 BDT</td><td></td></tr>
+                        <tr><td>AD*KON</td><td>Timeline</td><td>—</td><td>Nov 2025 – Jun 2026</td><td></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="note">
+                <strong>Strategic Justification:</strong> The old machines (2007 &amp; 2009) are obsolete; spare parts are no longer available. The new machine saves manpower, floor space, electricity, compressed air, and improves product quality through advanced technology.
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            Based on Excel data · Prepared for Capex Committee · All figures in BDT
+        </div>
+    </div>
+
+    <script>
+        // ---------- Tab Switching ----------
+        const tabs = document.querySelectorAll('.tab-btn');
+        const contents = {
+            tab1: document.getElementById('tab1'),
+            tab2: document.getElementById('tab2'),
+            tab3: document.getElementById('tab3')
+        };
+
+        tabs.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabs.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                Object.keys(contents).forEach(key => contents[key].classList.remove('active'));
+                const target = btn.dataset.tab;
+                contents[target].classList.add('active');
+                // redraw charts after tab becomes visible (fix sizing)
+                setTimeout(() => {
+                    Object.values(charts).forEach(chart => chart.resize());
+                }, 100);
+            });
+        });
+
+        // ---------- Chart Colors ----------
+        const blue = '#1a4a7a';
+        const lightBlue = '#5b8db8';
+        const orange = '#d97706';
+        const green = '#0f7b3e';
+        const red = '#b91c1c';
+        const gray = '#94a3b8';
+
+        // ---------- Chart Instances ----------
+        const charts = {};
+
+        // 1. Power cost per month
+        const ctx1 = document.getElementById('powerCostChart').getContext('2d');
+        charts.powerCost = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['Old (2 machines)', 'New (1 machine)'],
+                datasets: [{
+                    label: 'BDT / Month',
+                    data: [624000, 408000],
+                    backgroundColor: [orange, blue],
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { callback: v => v / 1000 + 'k' }
+                    }
+                }
+            }
+        });
+
+        // 2. Daily Production
+        const ctx2 = document.getElementById('productionChart').getContext('2d');
+        charts.production = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Old', 'New'],
+                datasets: [{
+                    label: 'Bags / 24h',
+                    data: [138240, 171360],
+                    backgroundColor: [orange, blue],
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, ticks: { callback: v => v / 1000 + 'k' } } }
+            }
+        });
+
+        // 3. Power per 1000 bags
+        const ctx3 = document.getElementById('powerPerBagChart').getContext('2d');
+        charts.powerPerBag = new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: ['Old', 'New'],
+                datasets: [{
+                    label: 'kW / 1000 bags',
+                    data: [18.1, 9.52],
+                    backgroundColor: [orange, blue],
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // 4. Output per person per hour
+        const ctx4 = document.getElementById('personOutputChart').getContext('2d');
+        charts.personOutput = new Chart(ctx4, {
+            type: 'bar',
+            data: {
+                labels: ['Old', 'New'],
+                datasets: [{
+                    label: 'Bags / person / hour',
+                    data: [1152, 1428],
+                    backgroundColor: [orange, blue],
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // 5. Savings Pie
+        const ctx5 = document.getElementById('savingsPieChart').getContext('2d');
+        charts.savingsPie = new Chart(ctx5, {
+            type: 'pie',
+            data: {
+                labels: ['Power Savings', 'Maintenance Savings'],
+                datasets: [{
+                    data: [2592000, 6816047],
+                    backgroundColor: [blue, '#5b8db8'],
+                    borderWidth: 2,
+                    borderColor: 'white'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                let pct = (context.parsed / total * 100).toFixed(1);
+                                return context.label + ': ' + (context.parsed / 1000).toFixed(0) + 'k BDT (' + pct + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 6. Annual Power Cost
+        const ctx6 = document.getElementById('annualPowerChart').getContext('2d');
+        charts.annualPower = new Chart(ctx6, {
+            type: 'bar',
+            data: {
+                labels: ['Old', 'New'],
+                datasets: [{
+                    label: 'BDT / Year',
+                    data: [7488000, 4896000],
+                    backgroundColor: [orange, blue],
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { callback: v => v / 1000 + 'k' }
+                    }
+                }
+            }
+        });
+
+        // 7. Manpower per shift
+        const ctx7 = document.getElementById('manpowerChart').getContext('2d');
+        charts.manpower = new Chart(ctx7, {
+            type: 'bar',
+            data: {
+                labels: ['Operators (3 shifts)'],
+                datasets: [{
+                    label: 'Old (2 machines)',
+                    data: [29],
+                    backgroundColor: orange,
+                    borderRadius: 6,
+                }, {
+                    label: 'New (1 machine)',
+                    data: [21],
+                    backgroundColor: blue,
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'top' } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // 8. Production per machine
+        const ctx8 = document.getElementById('productionPerMachineChart').getContext('2d');
+        charts.prodPerMachine = new Chart(ctx8, {
+            type: 'bar',
+            data: {
+                labels: ['Bags / min'],
+                datasets: [{
+                    label: 'Old (per machine)',
+                    data: [120],
+                    backgroundColor: orange,
+                    borderRadius: 6,
+                }, {
+                    label: 'New (per machine)',
+                    data: [140],
+                    backgroundColor: blue,
+                    borderRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'top' } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // Resize charts when window resizes
+        window.addEventListener('resize', () => {
+            Object.values(charts).forEach(chart => chart.resize());
+        });
+    </script>
+</body>
+</html>
