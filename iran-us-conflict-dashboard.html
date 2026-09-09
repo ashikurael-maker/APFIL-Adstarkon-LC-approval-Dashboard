@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iran–US Conflict Monitor · Situation Dashboard · 09 Sep 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0b0e14;
+    --bg2:#11151f;
+    --panel:#151b28;
+    --panel2:#1a2233;
+    --line:#263049;
+    --txt:#e7ecf5;
+    --muted:#8b96ad;
+    --accent:#e6a23c;
+    --red:#ef5350;
+    --amber:#ffb74d;
+    --green:#66bb6a;
+    --blue:#42a5f5;
+    --purple:#ab47bc;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--txt);
+    font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;
+    line-height:1.5;
+    padding:0 0 60px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1320px;margin:0 auto;padding:0 22px}
+  /* HEADER */
+  header{
+    background:linear-gradient(180deg,#101625 0%,#0b0e14 100%);
+    border-bottom:1px solid var(--line);
+    padding:26px 0 22px;
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(8px);
+  }
+  .topbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+  .brand{display:flex;align-items:center;gap:14px}
+  .brand .sigil{
+    width:46px;height:46px;border-radius:11px;
+    background:radial-gradient(circle at 30% 30%,#e6a23c,#7a4b0f);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:20px;color:#0b0e14;
+    box-shadow:0 0 22px rgba(230,162,60,.35);
+  }
+  .brand h1{font-size:1.28rem;font-weight:700;letter-spacing:.3px}
+  .brand .sub{font-size:.78rem;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase}
+  .statusrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .live{
+    display:inline-flex;align-items:center;gap:8px;
+    background:#2a1414;border:1px solid #5c2323;color:#ff8a80;
+    padding:7px 14px;border-radius:999px;font-size:.78rem;font-weight:700;letter-spacing:.6px;
+  }
+  .live .dot{width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 0 0 rgba(239,83,80,.6);animation:pulse 1.8s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(239,83,80,.55)}70%{box-shadow:0 0 0 9px rgba(239,83,80,0)}100%{box-shadow:0 0 0 0 rgba(239,83,80,0)}}
+  .date{font-size:.82rem;color:var(--muted)}
+  .date b{color:var(--txt)}
+  .flashbar{
+    margin-top:16px;background:linear-gradient(90deg,#2a1414,#1a2233);
+    border:1px solid var(--line);border-left:4px solid var(--red);
+    padding:12px 16px;border-radius:10px;font-size:.9rem;
+  }
+  .flashbar b{color:#ff8a80}
+  /* GRID */
+  .grid{display:grid;gap:18px;margin-top:22px}
+  .g-kpi{grid-template-columns:repeat(6,1fr)}
+  .g-2{grid-template-columns:1.6fr 1fr}
+  .g-3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:980px){.g-kpi{grid-template-columns:repeat(3,1fr)}.g-2,.g-3{grid-template-columns:1fr}}
+  @media(max-width:560px){.g-kpi{grid-template-columns:repeat(2,1fr)}}
+  /* CARDS */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .card h2{font-size:.82rem;letter-spacing:1.3px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .card h2 .bar{width:4px;height:16px;background:var(--accent);border-radius:3px;display:inline-block}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;position:relative;overflow:hidden}
+  .kpi .lbl{font-size:.72rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+  .kpi .val{font-size:1.72rem;font-weight:800;margin:4px 0 2px}
+  .kpi .delta{font-size:.76rem;font-weight:600}
+  .kpi .delta.up{color:var(--red)} .kpi .delta.down{color:var(--green)} .kpi .delta.flat{color:var(--muted)}
+  .kpi .tick{position:absolute;top:0;left:0;right:0;height:3px}
+  .kpi.crit .tick{background:var(--red)} .kpi.warn .tick{background:var(--amber)} .kpi.ok .tick{background:var(--green)}
+  /* TIMELINE */
+  .tl{position:relative;padding-left:24px}
+  .tl:before{content:'';position:absolute;left:7px;top:4px;bottom:4px;width:2px;background:var(--line)}
+  .tl-item{position:relative;margin-bottom:16px}
+  .tl-item:last-child{margin-bottom:0}
+  .tl-item .dot{position:absolute;left:-24px;top:3px;width:16px;height:16px;border-radius:50%;border:3px solid var(--bg2)}
+  .tl-item .dot.major{background:var(--red)} .tl-item .dot.eco{background:var(--accent)} .tl-item .dot.dip{background:var(--green)} .tl-item .dot.std{background:var(--blue)}
+  .tl-item .when{font-size:.72rem;color:var(--accent);font-weight:700;letter-spacing:.5px}
+  .tl-item .what{font-size:.88rem;margin-top:1px}
+  .tl-item .src{font-size:.72rem;color:var(--muted)}
+  /* TABLE */
+  table{width:100%;border-collapse:collapse;font-size:.85rem}
+  th{text-align:left;color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.8px;padding:8px 10px;border-bottom:1px solid var(--line)}
+  td{padding:9px 10px;border-bottom:1px solid #1c2436;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.7rem;font-weight:700}
+  .tag.red{background:#2a1414;color:#ff8a80;border:1px solid #5c2323}
+  .tag.amber{background:#2b2112;color:#ffb74d;border:1px solid #5c4520}
+  .tag.green{background:#12261a;color:#81c995;border:1px solid #1f4a2e}
+  .tag.blue{background:#122233;color:#8ab4f8;border:1px solid #1f3a5c}
+  /* SCENARIOS */
+  .scen{border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:10px;background:var(--panel)}
+  .scen .head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .scen h3{font-size:1rem}
+  .prob{font-size:.85rem;font-weight:800;padding:5px 12px;border-radius:999px}
+  .prob.p1{background:#2a1414;color:#ff8a80;border:1px solid #5c2323}
+  .prob.p2{background:#2b2112;color:#ffb74d;border:1px solid #5c4520}
+  .prob.p3{background:#12261a;color:#81c995;border:1px solid #1f4a2e}
+  .scen p{font-size:.84rem;color:#c6cfdd}
+  .scen ul{list-style:none;margin-top:2px}
+  .scen li{font-size:.8rem;color:var(--muted);padding:4px 0 4px 18px;position:relative}
+  .scen li:before{content:'▸';position:absolute;left:2px;color:var(--accent)}
+  .scen .impact{margin-top:6px;font-size:.8rem;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:9px 12px}
+  .scen .impact b{color:var(--amber)}
+  /* chips */
+  .chip{display:inline-block;font-size:.74rem;padding:3px 10px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);color:var(--muted);margin:2px 3px 2px 0}
+  .chartbox{position:relative;height:280px}
+  .chartbox.tall{height:340px}
+  .note{font-size:.74rem;color:var(--muted);margin-top:10px;font-style:italic}
+  .src-list{font-size:.74rem;color:var(--muted)}
+  .src-list a{color:var(--blue);text-decoration:none}
+  .src-list li{margin-bottom:4px;list-style:none}
+  .disc{background:#141a26;border:1px solid var(--line);border-radius:12px;padding:14px 18px;font-size:.78rem;color:var(--muted)}
+  .disc b{color:var(--amber)}
+  .section-head{display:flex;align-items:center;gap:10px;margin:34px 0 14px}
+  .section-head h1{font-size:1.15rem;font-weight:700;letter-spacing:.3px}
+  .section-head .rule{flex:1;height:1px;background:var(--line)}
+  .muted{color:var(--muted)}
+  .flexrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="sigil">⚔</div>
+        <div>
+          <h1>Iran–US Conflict Monitor</h1>
+          <div class="sub">Strait of Hormuz · Situation Dashboard</div>
+        </div>
+      </div>
+      <div class="statusrow">
+        <span class="live"><span class="dot"></span> ESCALATING — Day 149</span>
+        <span class="date">Report date: <b>Wednesday, 09 September 2026</b> · 09:00 GMT</span>
+      </div>
+    </div>
+    <div class="flashbar">
+      <b>FLASH (09 Sep):</b> U.S. forces destroyed <b>5 Iranian oil tankers</b> after an attack on a U.S. Navy warship. Iran retaliated with strikes on a <b>U.S. base in Jordan</b> and ships near Hormuz; Houthi forces struck <b>Saudi Arabia</b>. <b>Brent crude ≈ $99/bbl</b> and climbing.
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- KPI ROW -->
+  <div class="grid g-kpi">
+    <div class="kpi crit"><div class="tick"></div>
+      <div class="lbl">Brent Crude</div>
+      <div class="val">$99<span style="font-size:1rem">/bbl</span></div>
+      <div class="delta up">▲ ~2% today · 4th straight up-day</div>
+    </div>
+    <div class="kpi crit"><div class="tick"></div>
+      <div class="lbl">Conflict Duration</div>
+      <div class="val">149<span style="font-size:1rem"> days</span></div>
+      <div class="delta flat">Since 14 Apr 2026</div>
+    </div>
+    <div class="kpi crit"><div class="tick"></div>
+      <div class="lbl">US Military KIA</div>
+      <div class="val">18<span style="font-size:1rem">*</span></div>
+      <div class="delta up">*Pentagon revised count — disputed</div>
+    </div>
+    <div class="kpi crit"><div class="tick"></div>
+      <div class="lbl">Tankers Destroyed (24h)</div>
+      <div class="val">5<span style="font-size:1rem"> US→IRN</span></div>
+      <div class="delta up">Iran struck ~10 ships in reply</div>
+    </div>
+    <div class="kpi warn"><div class="tick"></div>
+      <div class="lbl">Strait of Hormuz</div>
+      <div class="val">DISRUPTED</div>
+      <div class="delta up">Traffic impaired · insurance surging</div>
+    </div>
+    <div class="kpi warn"><div class="tick"></div>
+      <div class="lbl">US Official Stance</div>
+      <div class="val" style="font-size:1.15rem;padding-top:10px">"Not a war"</div>
+      <div class="delta flat">"Small potatoes" — Trump admin</div>
+    </div>
+  </div>
+
+  <!-- TODAY'S UPDATE -->
+  <div class="section-head"><h1>Today's Update — 09 September 2026</h1><div class="rule"></div></div>
+  <div class="grid g-2">
+    <div class="card">
+      <h2><span class="bar"></span> Headline Developments</h2>
+      <div class="tl">
+        <div class="tl-item"><div class="dot major"></div>
+          <div class="when">05:20 GMT</div>
+          <div class="what">U.S. Navy confirms it <b>destroyed 5 Iranian oil tankers</b> (IRGC-linked) in response to an attack on a U.S. warship in the Gulf.</div>
+          <div class="src">NPR · Al Jazeera · RFE/RL</div>
+        </div>
+        <div class="tl-item"><div class="dot major"></div>
+          <div class="when">04:07 GMT</div>
+          <div class="what">Iran strikes a <b>U.S. base in Jordan</b> and fires on <b>~10 vessels</b> near Hormuz after the tanker sinkings.</div>
+          <div class="src">Reuters · Straits Times</div>
+        </div>
+        <div class="tl-item"><div class="dot major"></div>
+          <div class="when">03:12 GMT</div>
+          <div class="what"><b>Brent nears $100/bbl</b> as markets price a widening Gulf conflict; oil gains for a 4th straight session.</div>
+          <div class="src">CBS News · Moneycontrol · ET</div>
+        </div>
+        <div class="tl-item"><div class="dot std"></div>
+          <div class="when">00:24 GMT</div>
+          <div class="what">Conflict spreads deeper: <b>Houthi forces strike Saudi Arabia</b>; Iran signals readiness to <b>escalate</b> amid economic pressure.</div>
+          <div class="src">The News · NYT</div>
+        </div>
+        <div class="tl-item"><div class="dot dip"></div>
+          <div class="when">08 Sep</div>
+          <div class="what">Pentagon <b>lowers its casualty count</b> — drawing congressional questions and public outrage; U.S. denies Iran hit an uncrewed U.S. ship.</div>
+          <div class="src">ABC News · Action News 5</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="bar"></span> Situation Assessment</h2>
+      <p style="font-size:.88rem;color:#c6cfdd;margin-bottom:12px">
+        After a <b>June 15 ceasefire deal</b> that briefly returned oil to pre-war levels, the agreement
+        <b>collapsed in July</b>. September marks a sharp re-escalation — the most intense exchange since the war's opening weeks.
+        The conflict is now <b>regionalizing</b> (Jordan, Saudi Arabia, Bahrain, Kuwait all struck), while Washington continues to
+        insist it is a <b>"military conflict, not a war."</b>
+      </p>
+      <div class="flexrow" style="margin-bottom:6px">
+        <span class="tag red">Active combat</span>
+        <span class="tag red">Hormuz impaired</span>
+        <span class="tag amber">Oil &gt; $95</span>
+        <span class="tag amber">Regional spillover</span>
+        <span class="tag blue">Diplomatic backchannel?</span>
+      </div>
+      <p class="note">Assessment is synthesised from reporting; it is not an official government position.</p>
+    </div>
+  </div>
+
+  <!-- OIL PRICE -->
+  <div class="section-head"><h1>Energy &amp; Market Trajectory</h1><div class="rule"></div></div>
+  <div class="grid g-2">
+    <div class="card">
+      <h2><span class="bar"></span> Brent Crude (USD/bbl) — reported trajectory</h2>
+      <div class="chartbox"><canvas id="oilChart"></canvas></div>
+      <p class="note">Reconstructed from reported anchor points (Apr baseline, peak, Jun-15 deal, Jul-7 return, Sep escalation). Approximate — verify against tick data.</p>
+    </div>
+    <div class="card">
+      <h2><span class="bar"></span> Escalation Intensity Index</h2>
+      <div class="chartbox"><canvas id="intensityChart"></canvas></div>
+      <p class="note">Composite of reported kinetic events (strikes, tanker losses, base attacks). Qualitative, indexed 0–100.</p>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="section-head"><h1>Conflict Timeline — Apr → Sep 2026</h1><div class="rule"></div></div>
+  <div class="card">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 30px" class="tl2">
+      <div class="tl">
+        <div class="tl-item"><div class="dot major"></div><div class="when">14–17 Apr 2026</div><div class="what">War begins; IEA calls it the <b>"most severe oil supply shock in history."</b></div><div class="src">ABC · CNN · IEA</div></div>
+        <div class="tl-item"><div class="dot eco"></div><div class="when">23 Apr 2026</div><div class="what">Trump warns Americans to expect <b>higher gas prices</b> "for a little while."</div><div class="src">CNBC</div></div>
+        <div class="tl-item"><div class="dot major"></div><div class="when">05–07 May 2026</div><div class="what">U.S. and Iran <b>exchange fire in the Strait of Hormuz</b>; oil surges.</div><div class="src">OilPrice · Al Jazeera</div></div>
+        <div class="tl-item"><div class="dot eco"></div><div class="when">24 May 2026</div><div class="what">Oil falls ~7% after Trump says talks are <b>"proceeding nicely."</b></div><div class="src">CNBC</div></div>
+        <div class="tl-item"><div class="dot dip"></div><div class="when">15 Jun 2026</div><div class="what"><b>US–Iran deal announced</b>; oil falls, shares jump.</div><div class="src">BBC</div></div>
+        <div class="tl-item"><div class="dot eco"></div><div class="when">18 Jun 2026</div><div class="what">Strait of Hormuz <b>reopens</b>; shipping recovery begins.</div><div class="src">The Conversation</div></div>
+      </div>
+      <div class="tl">
+        <div class="tl-item"><div class="dot eco"></div><div class="when">07 Jul 2026</div><div class="what">Oil returns to <b>pre-war levels</b>; market absorbs historic supply loss.</div><div class="src">Business Insider</div></div>
+        <div class="tl-item"><div class="dot major"></div><div class="when">08 Jul 2026</div><div class="what"><b>Deal breaks down</b>; escalation rekindles; oil +4% on 12 Jul.</div><div class="src">WaPo · OilPrice</div></div>
+        <div class="tl-item"><div class="dot std"></div><div class="when">27 Jul 2026</div><div class="what">War enters <b>6th month</b>; NYT flags "greater uncertainty."</div><div class="src">NYT</div></div>
+        <div class="tl-item"><div class="dot major"></div><div class="when">01–02 Sep 2026</div><div class="what">Renewed strikes; Brent crosses <b>$91 → $96</b>; Iran fires on Gulf neighbors after a reported <b>wedding strike</b>.</div><div class="src">PBS · CBS · BusinessToday</div></div>
+        <div class="tl-item"><div class="dot std"></div><div class="when">03–05 Sep 2026</div><div class="what">Iran buries wedding victims, fires on Kuwait; IRGC missiles at Jordan; <b>18 US KIA</b>; Trump: "small potatoes."</div><div class="src">Reuters · iranintl · Fortune</div></div>
+        <div class="tl-item"><div class="dot major"></div><div class="when">08–09 Sep 2026</div><div class="what"><b>US destroys 5 tankers</b>; Iran hits Jordan base + 10 ships; Houthis hit KSA; <b>oil ≈ $99.</b></div><div class="src">NPR · Reuters · CBS</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTORS -->
+  <div class="section-head"><h1>Key Actors &amp; Posture</h1><div class="rule"></div></div>
+  <div class="card">
+    <table>
+      <thead><tr><th>Actor</th><th>Posture</th><th>Recent Actions</th><th>Stance / Rhetoric</th></tr></thead>
+      <tbody>
+        <tr><td><b>United States</b></td><td><span class="tag red">Kinetic</span></td><td>Destroyed 5 Iranian tankers; naval ops in Gulf</td><td>"Military conflict, not a war"; "small potatoes" (Trump)</td></tr>
+        <tr><td><b>Iran</b></td><td><span class="tag red">Escalating</span></td><td>Struck US base in Jordan; fired on ~10 ships; missiles at allies</td><td>Threatens "more painful" retaliation; signals readiness to escalate</td></tr>
+        <tr><td><b>Israel</b></td><td><span class="tag amber">Aligned w/ US</span></td><td>Reported part of "US-Israel war on Iran"</td><td>Coordinating on Iranian targets</td></tr>
+        <tr><td><b>Houthis (Yemen)</b></td><td><span class="tag red">Active</span></td><td>Struck Saudi Arabia</td><td>Proxying for Iran in regional spillover</td></tr>
+        <tr><td><b>Gulf states (KSA, Jordan, Bahrain, Kuwait)</b></td><td><span class="tag amber">Under fire</span></td><td>Intercepting missiles/drones; air-defense active</td><td>Caught in crossfire; pressing for restraint</td></tr>
+        <tr><td><b>Global oil market</b></td><td><span class="tag amber">Stressed</span></td><td>Brent ~$99; depleted strategic stocks</td><td>Pricing $120+ if conflict drags on</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SCENARIOS -->
+  <div class="section-head"><h1>Future Possible Scenarios</h1><div class="rule"></div></div>
+  <div class="grid g-3">
+    <div class="scen">
+      <div class="head"><h3>① Protracted Punctuated Conflict</h3><span class="prob p1">BASE · ~50%</span></div>
+      <p>Neither side seeks all-out war. Tit-for-tat strikes continue around Hormuz, with periodic pauses. Washington maintains the "not a war" frame through the midterms.</p>
+      <ul>
+        <li>Oil oscillates <b>$90–$115</b>; volatility spikes on each exchange</li>
+        <li>Shipping continues at reduced, insured volume</li>
+        <li>Casualties accrue slowly; no formal AUMF</li>
+      </ul>
+      <div class="impact"><b>Watch:</b> Hormuz insurance rates, IRGC missile tempo, any U.S. carrier re-posturing, midterm political pressure.</div>
+    </div>
+    <div class="scen">
+      <div class="head"><h3>② Full Regional Escalation</h3><span class="prob p2">UPSIDE RISK · ~25%</span></div>
+      <p>A miscalculation — e.g., a strike on Iranian leadership/nuclear infra or a mass-casualty event on a U.S. asset — triggers a decisive escalation ladder.</p>
+      <ul>
+        <li>Iran mines/fully closes Hormuz; direct Israel &amp; Gulf strikes widen</li>
+        <li><b>Oil $120–$150+</b>; global recession risk rises sharply</li>
+        <li>Possible U.S. request for war authorization from Congress</li>
+      </ul>
+      <div class="impact"><b>Triggers:</b> Hormuz closure, strike on Iranian nuclear sites, US KIA > 50, formal AUMF debate, wider Israel-Lebanon/Syria front.</div>
+    </div>
+    <div class="scen">
+      <div class="head"><h3>③ Diplomatic Off-Ramp</h3><span class="prob p3">DOWNSIDE RISK · ~25%</span></div>
+      <p>Economic pain (Iran's internal pressure) and market stress push both sides back to the table via Oman/Qatar backchannels — a repeat of June 15 with harder enforcement.</p>
+      <ul>
+        <li>Ceasefire + phased Hormuz reopening</li>
+        <li>Oil normalizes to <b>$75–$85</b></li>
+        <li>Deal risk: verification disputes repeat July's collapse</li>
+      </ul>
+      <div class="impact"><b>Triggers:</b> IRGC de-escalatory signal, U.S. envoy to Oman/Qatar, oil-price relief package, Gulf states' joint mediation.</div>
+    </div>
+  </div>
+
+  <!-- LEADING INDICATORS -->
+  <div class="section-head"><h1>Leading Indicators to Watch</h1><div class="rule"></div></div>
+  <div class="card">
+    <div class="flexrow">
+      <span class="chip">Hormuz tanker transit counts</span>
+      <span class="chip">War-risk insurance premiums</span>
+      <span class="chip">Brent backwardation / term structure</span>
+      <span class="chip">IRGC official statements</span>
+      <span class="chip">US carrier strike-group position</span>
+      <span class="chip">Congressional AUMF debate</span>
+      <span class="chip">Gulf air-defense activation</span>
+      <span class="chip">Houthi attacks on KSA</span>
+      <span class="chip">Oman / Qatar backchannel diplomacy</span>
+      <span class="chip">Strategic Petroleum Reserve releases</span>
+      <span class="chip">Shipping re-routing via Cape of Good Hope</span>
+      <span class="chip">Suez / Red Sea security posture</span>
+    </div>
+    <p class="note">A sustained rise in war-risk insurance + a fall in Hormuz transits, combined with belligerent IRGC signaling, is the most reliable early-warning of Scenario ②.</p>
+  </div>
+
+  <!-- SOURCES -->
+  <div class="section-head"><h1>Sources &amp; Methodology</h1><div class="rule"></div></div>
+  <div class="card">
+    <ul class="src-list">
+      <li>Reuters — "Iran attacks US base in Jordan, ships near Hormuz after tankers sunk" (09 Sep 2026)</li>
+      <li>NPR / Al Jazeera / RFE-RL — "U.S. military destroyed 5 Iranian oil tankers" (09 Sep 2026)</li>
+      <li>CBS News — "U.S. forces hit IRGC-linked oil tankers as oil nears $100 a barrel" (09 Sep 2026)</li>
+      <li>The Economic Times — "Crude oil at $99 as Iran attacks US base in Jordan" (09 Sep 2026)</li>
+      <li>The New York Times — "Iran Signals Readiness to Escalate War With U.S." (09 Sep 2026)</li>
+      <li>Fortune / NBC — "Trump calls the Iran war 'small potatoes'" (04–05 Sep 2026)</li>
+      <li>ABC News — "Pentagon lowers count of Iran war dead and wounded" (08 Sep 2026)</li>
+      <li>BBC — "Oil prices fall and shares jump after US-Iran deal announced" (15 Jun 2026)</li>
+      <li>The Washington Post — "Is an Iran deal 'over' and war back on?" (08 Jul 2026)</li>
+      <li>The Guardian — "How the Iran war unfolded" (28 Aug 2026) · IEA (Apr 2026)</li>
+    </ul>
+  </div>
+
+  <div class="disc" style="margin-top:22px">
+    <b>Disclaimer &amp; data notes.</b> This dashboard aggregates publicly reported news for situational awareness and forward-looking
+    scenario planning only. Figures marked <b>*</b> are disputed or under revision. The oil-price series and the escalation-intensity
+    index are <b>reconstructed estimates</b> from reported anchor points, not tick-level market data — verify against primary sources
+    (ICE Brent, EIA, shipping AIS, official statements) before making decisions. Scenario probabilities are qualitative analyst judgments,
+    not statistical forecasts. This is not investment, legal, or national-security advice.
+  </div>
+
+  <p class="note" style="text-align:center;margin-top:26px">Iran–US Conflict Monitor · Generated 09 Sep 2026 · Next refresh: continuous</p>
+</div>
+
+<script>
+const axis = {ticks:{color:'#8b96ad',font:{size:10}},grid:{color:'#1c2436'}};
+Chart.defaults.color = '#8b96ad';
+Chart.defaults.font.family = "'Segoe UI',sans-serif";
+
+// OIL PRICE
+const oilLabels = ['14 Apr','21 Apr','28 Apr','07 May','24 May','06 Jun','15 Jun','18 Jun','07 Jul','12 Jul','01 Aug','28 Aug','01 Sep','02 Sep','08 Sep','09 Sep'];
+const oilData   = [78, 130, 121, 138, 98, 108, 82, 76, 74, 83, 86, 88, 91, 96, 97, 99];
+new Chart(document.getElementById('oilChart'),{
+  type:'line',
+  data:{labels:oilLabels,datasets:[{
+    label:'Brent (USD/bbl)',data:oilData,
+    borderColor:'#e6a23c',backgroundColor:'rgba(230,162,60,.15)',
+    fill:true,tension:.35,pointRadius:3,pointBackgroundColor:'#e6a23c',borderWidth:2.5
+  }]},
+  options:{plugins:{legend:{display:false}},scales:{x:axis,y:{...axis,suggestedMin:60,suggestedMax:160}}},
+});
+// annotate $100 line
+const oilChart = Chart.getChart('oilChart');
+const ctx = oilChart.ctx;
+Chart.register({
+  id:'hundredLine',afterDraw(chart){
+    const y = chart.scales.y.getPixelForValue(100);
+    const x0=chart.chartArea.left, x1=chart.chartArea.right;
+    ctx.save();ctx.strokeStyle='rgba(239,83,80,.55)';ctx.setLineDash([5,5]);ctx.lineWidth=1.2;
+    ctx.beginPath();ctx.moveTo(x0,y);ctx.lineTo(x1,y);ctx.stroke();ctx.restore();
+    ctx.save();ctx.fillStyle='#ef5350';ctx.font='10px Segoe UI';ctx.textAlign='right';
+    ctx.fillText('$100',x1,y-4);ctx.restore();
+  }
+});
+
+// ESCALATION INTENSITY
+const intLabels = ['Apr','May','Jun','Jul','Aug','Sep'];
+const intData   = [95, 88, 35, 60, 55, 90];
+new Chart(document.getElementById('intensityChart'),{
+  type:'bar',
+  data:{labels:intLabels,datasets:[{
+    label:'Escalation index',data:intData,
+    backgroundColor:intData.map(v=> v>=80?'#ef5350': v>=55?'#ffb74d':'#66bb6a'),
+    borderRadius:6
+  }]},
+  options:{plugins:{legend:{display:false}},scales:{x:axis,y:{...axis,suggestedMin:0,suggestedMax:100}}}
+});
+</script>
+</body>
+</html>
