@@ -1,0 +1,276 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SCM Savings Report — September 2026 — Supply Chain Department</title><style>
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background:#f3f4f6;
+    color:#1a1d23;
+    font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;
+    padding:28px 16px 60px;
+  }
+  .wrap{ max-width:1280px; margin:0 auto; }
+  h1{
+    font-size:20px;
+    margin:0 0 4px;
+  }
+  .sub{
+    color:#5a6270;
+    font-size:13px;
+    margin:0 0 18px;
+  }
+  .section-h1{
+    margin-top:34px;
+    padding-top:22px;
+    border-top:1px solid #dfe2e7;
+  }
+  .footnote{
+    font-size:11.5px;
+    color:#5a6270;
+    margin:10px 2px 0;
+    line-height:1.5;
+  }
+  .summary{
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+  }
+  .summary .box{
+    background:#fff;
+    border:1px solid #dfe2e7;
+    border-radius:6px;
+    padding:10px 16px;
+  }
+  .summary .box .k{ font-size:11px; color:#5a6270; text-transform:uppercase; letter-spacing:0.4px; }
+  .summary .box .v{ font-size:17px; font-weight:700; margin-top:2px; }
+  .section-label{
+    font-size:11px;
+    color:#5a6270;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    margin:0 0 6px;
+  }
+  .sbu-summary{ margin-bottom:18px; }
+  .sbu-summary .box .v{ color:#1a56db; }
+  .chart-row{
+    display:flex;
+    gap:22px;
+    align-items:stretch;
+    margin-bottom:18px;
+    flex-wrap:wrap;
+  }
+  .sbu-panel{
+    flex:1 1 640px;
+    min-width:0;
+  }
+  .chart-flex{
+    display:flex;
+    gap:22px;
+    align-items:stretch;
+    flex-wrap:wrap;
+  }
+  .vbox-list{
+    flex:0 0 320px;
+    margin-bottom:0;
+    flex-wrap:nowrap;
+    flex-direction:column;
+    gap:8px;
+  }
+  .vbox-list .box{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:8px 14px;
+  }
+  .vbox-list .box .k{ white-space:nowrap; }
+  .vbox-list .box .v{ margin-top:0; white-space:nowrap; }
+  .chart-card{
+    flex:0 0 300px;
+    background:#fff;
+    border:1px solid #dfe2e7;
+    border-radius:10px;
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+  }
+  .donut{
+    width:160px;
+    height:160px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+  }
+  .donut-hole{
+    width:98px;
+    height:98px;
+    border-radius:50%;
+    background:#fff;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 0 0 1px #eef0f3;
+  }
+  .donut-hole-label{ font-size:10px; color:#5a6270; text-transform:uppercase; letter-spacing:0.4px; }
+  .donut-hole-value{ font-size:14px; font-weight:700; color:#1a1d23; margin-top:2px; }
+  .chart-legend{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+    color:#2b2f36;
+  }
+  .legend-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    flex-shrink:0;
+  }
+  .legend-label{ flex:1; }
+  .legend-pct{ font-weight:700; color:#5a6270; }
+  .bar-chart-card{
+    flex:1 1 420px;
+    min-width:0;
+    background:#fff;
+    border:1px solid #dfe2e7;
+    border-radius:10px;
+    padding:18px 20px;
+  }
+  .bar-chart-card .section-label{ margin:0 0 6px; }
+  .bar-chart-total{
+    font-size:13px;
+    color:#5a6270;
+    margin-bottom:14px;
+  }
+  .bar-chart-total b{ color:#1a1d23; font-size:15px; }
+  .bar-chart-list{ display:flex; flex-direction:column; gap:11px; }
+  .bar-row{ width:100%; }
+  .bar-label-line{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:10px;
+    font-size:12px;
+    color:#2b2f36;
+    margin-bottom:4px;
+  }
+  .bar-label{ font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .bar-value{ font-weight:700; color:#1a1d23; white-space:nowrap; flex-shrink:0; }
+  .bar-pct{ font-weight:400; color:#5a6270; }
+  .bar-track{
+    background:#eef0f3;
+    border-radius:5px;
+    height:11px;
+    overflow:hidden;
+  }
+  .bar-fill{
+    height:100%;
+    border-radius:5px;
+  }
+  .table-container{
+    background:#fff;
+    border:1px solid #dfe2e7;
+    border-radius:6px;
+    overflow-x:auto;
+  }
+  table{
+    border-collapse:collapse;
+    width:100%;
+    min-width:1150px;
+    font-size:12.8px;
+  }
+  thead th{
+    background:#f7f8fa;
+    text-align:left;
+    padding:9px 10px;
+    border-bottom:2px solid #dfe2e7;
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:0.3px;
+    color:#3a3f47;
+    position:sticky;
+    top:0;
+  }
+  thead th.num{ text-align:right; }
+  tbody td{
+    padding:8px 10px;
+    border-bottom:1px solid #edeff2;
+    vertical-align:top;
+  }
+  tbody tr:nth-child(even){ background:#fafbfc; }
+  td.sbu{ font-weight:600; white-space:nowrap; }
+  td.mono{ font-family:ui-monospace,Consolas,monospace; font-size:12px; color:#4a4f58; white-space:nowrap; }
+  td.num{ text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  td.savings{ font-weight:600; color:#1a56db; }
+  td.evidence a{ color:#1a56db; text-decoration:none; }
+  td.evidence a:hover{ text-decoration:underline; }
+  .dash{ color:#a2a8b1; }
+  .pending{ color:#a15c00; font-style:italic; }
+  tr.subtotal-row td{ background:#f7f8fa; font-size:12px; color:#3a3f47; }
+  tr.subtotal-row td em{ font-style:italic; }
+  tfoot td{
+    padding:10px;
+    border-top:2px solid #dfe2e7;
+    font-weight:700;
+    background:#f7f8fa;
+  }
+  tfoot td.num{ text-align:right; color:#1a56db; }
+  .methodology{
+    background:#fff;
+    border:1px solid #dfe2e7;
+    border-radius:6px;
+    padding:16px 18px;
+    margin-bottom:18px;
+  }
+  .methodology h2{
+    font-size:14px;
+    margin:0 0 6px;
+    color:#1a1d23;
+  }
+  .methodology .lead{
+    font-size:12.5px;
+    color:#5a6270;
+    margin:0 0 12px;
+    line-height:1.5;
+  }
+  .methodology table{
+    min-width:0;
+    font-size:12.3px;
+  }
+  .methodology thead th{
+    position:static;
+  }
+  .methodology thead th.num{ text-align:right; }
+  .methodology tfoot td{
+    padding:10px;
+    border-top:2px solid #dfe2e7;
+    font-weight:700;
+    background:#f7f8fa;
+  }
+  .methodology tfoot td.num{ text-align:right; color:#1a56db; }
+  td.m-name{ font-weight:600; white-space:nowrap; }
+  td.m-amt{ font-weight:600; color:#1a56db; white-space:nowrap; }
+</style></head><body><div class="wrap">
+<h1>SCM Target VS Achievement_ Sep 2026</h1><p class="sub">Source: Savings Target SCM — September 2026 (Savings Summary tab)</p>
+<div class="summary"><div class="box"><div class="k">Categories</div><div class="v">7</div></div><div class="box"><div class="k">Target Sep 2026 (BDT)</div><div class="v">৳53,910,000</div></div><div class="box"><div class="k">Achievement Sep 2026 (BDT)</div><div class="v">৳89,427,167</div></div><div class="box"><div class="k">Sep Achievement %</div><div class="v">165.88%</div></div></div>
+<div class="table-container"><table style="min-width:700px"><thead><tr><th>Procurement Category</th><th class="num">Target Sep 2026 (BDT)</th><th class="num">Achievement Sep (BDT)</th><th class="num">Sep vs Target</th></tr></thead><tbody><tr><td>Raw Material-Consumer Cluster (AAFL, ABL, ALEL)</td><td class="num">৳10,200,000</td><td class="num savings">৳16,112,779</td><td class="num" style="color:#2f9e44;font-weight:700">158.0%</td></tr><tr><td>Direct Material - Building Cluster</td><td class="num">৳21,000,000</td><td class="num savings">৳41,829,281</td><td class="num" style="color:#2f9e44;font-weight:700">199.2%</td></tr><tr><td>Capex &amp; MRO-Import &amp; Local (Mechanical, Electrical, Vehicle, Civil Contructor &amp; Indirect Purchase Marketing</td><td class="num">৳12,910,000</td><td class="num savings">৳17,707,011</td><td class="num" style="color:#2f9e44;font-weight:700">137.2%</td></tr><tr><td>Distribution and Logistics</td><td class="num">৳4,800,000</td><td class="num savings">৳4,554,177</td><td class="num" style="color:#c92a2a;font-weight:700">94.9%</td></tr><tr><td>Packaging Development</td><td class="num">৳2,000,000</td><td class="num savings">৳4,860,650</td><td class="num" style="color:#2f9e44;font-weight:700">243.0%</td></tr><tr><td>Raw Material-Paddy AEL</td><td class="num">৳2,500,000</td><td class="num savings">৳4,036,325</td><td class="num" style="color:#2f9e44;font-weight:700">161.5%</td></tr><tr><td>Indirect Procurement- Consumer Electronic</td><td class="num">৳500,000</td><td class="num savings">৳326,945</td><td class="num" style="color:#c92a2a;font-weight:700">65.4%</td></tr></tbody><tfoot><tr><td>Grand Total</td><td class="num">৳53,910,000</td><td class="num">৳89,427,167</td><td class="num">165.9%</td></tr></tfoot></table></div>
+<p class="footnote">Revised Supply Chain savings target is 5.4 Cr (BDT 54,000,000); category targets above sum to ৳53,910,000. The Target Sep-26 tab totals ৳56,910,000 because its Building Cluster lines (৳24.0M incl. ৳3.0M ARMCL/ABSC Budget-vs-COGS) differ from the ৳21.0M used in the Savings Summary — please confirm the final baseline. Green = target met, red = below target.</p>
+<h1 class="section-h1">SCM Savings Report — September 2026 — Supply Chain Department</h1><p class="sub">Source: Savings Data_Sep1 tab — validated line items</p>
+<div class="methodology"><h2>Savings Calculation Methodology — Multi-Baseline Framework — September 2026</h2><p class="lead">Savings are captured against whichever baseline is most defensible for a category, not a single fixed formula. Each method compares the actual purchase to a different, category-appropriate reference point:</p><table><thead><tr><th>Method</th><th class="num">Line Items</th><th class="num">Savings (BDT)</th><th class="num">Share</th></tr></thead><tbody><tr><td class="m-name">Market Average vs. Purchase Average</td><td class="num">3</td><td class="m-amt num">৳44,730,259</td><td class="num">50.0%</td></tr><tr><td class="m-name">Offer vs. Negotiated PO Price</td><td class="num">45</td><td class="m-amt num">৳19,537,066</td><td class="num">21.8%</td></tr><tr><td class="m-name">SUPPLIER HS CODE VS. DECLARED HS CODE</td><td class="num">1</td><td class="m-amt num">৳10,270,616</td><td class="num">11.5%</td></tr><tr><td class="m-name">Last Purchase Price vs. Current</td><td class="num">1</td><td class="m-amt num">৳4,860,650</td><td class="num">5.4%</td></tr><tr><td class="m-name">Cost Avoidance &amp; Logistics Optimisation</td><td class="num">6</td><td class="m-amt num">৳4,554,177</td><td class="num">5.1%</td></tr><tr><td class="m-name">Benchmark Savings</td><td class="num">2</td><td class="m-amt num">৳4,036,325</td><td class="num">4.5%</td></tr><tr><td class="m-name">Multi-Baseline Methodology</td><td class="num">2</td><td class="m-amt num">৳1,111,130</td><td class="num">1.2%</td></tr><tr><td class="m-name">Contract / Negotiation Discount</td><td class="num">6</td><td class="m-amt num">৳326,945</td><td class="num">0.4%</td></tr></tbody><tfoot><tr><td>Total</td><td class="num">66</td><td class="num">৳89,427,167</td><td class="num">100%</td></tr></tfoot></table></div>
+<div class="summary"><div class="box"><div class="k">Line Items</div><div class="v">66</div></div><div class="box"><div class="k">Total Savings (BDT)</div><div class="v">৳89,427,167</div></div></div>
+<div class="chart-row"><div class="sbu-panel"><p class="section-label">SBU-wise Savings (BDT)</p><div class="chart-flex"><div class="summary sbu-summary vbox-list"><div class="box"><div class="k">Building Cluster</div><div class="v">৳48,724,021</div></div><div class="box"><div class="k">Group</div><div class="v">৳15,672,921</div></div><div class="box"><div class="k">ALEL</div><div class="v">৳10,270,616</div></div><div class="box"><div class="k">Agro Feed</div><div class="v">৳6,148,023</div></div><div class="box"><div class="k">Monwara Auto Rice Mill</div><div class="v">৳3,223,583</div></div><div class="box"><div class="k">Akij Cement Company Ltd</div><div class="v">৳2,003,176</div></div><div class="box"><div class="k">Agro Breeder</div><div class="v">৳1,330,289</div></div><div class="box"><div class="k">Farik Auto Rice Mill</div><div class="v">৳812,742</div></div><div class="box"><div class="k">Others (5 SBUs)</div><div class="v">৳1,241,797</div></div></div><div class="chart-card"><div class="donut" style="background:conic-gradient(#2f6fed 0.000% 54.485%, #1c7ed6 54.485% 72.010%, #228be6 72.010% 83.495%, #4dabf7 83.495% 90.370%, #3b5bdb 90.370% 93.975%, #5c7cfa 93.975% 96.215%, #0c8599 96.215% 97.703%, #2f9e44 97.703% 98.611%, #e8590c 98.611% 100.000%);"><div class="donut-hole"><div class="donut-hole-label">Total</div><div class="donut-hole-value">৳89,427,167</div></div></div><div class="chart-legend"><div class="legend-item"><span class="legend-dot" style="background:#2f6fed"></span><span class="legend-label">Building Cluster</span><span class="legend-pct">54.5%</span></div><div class="legend-item"><span class="legend-dot" style="background:#1c7ed6"></span><span class="legend-label">Group</span><span class="legend-pct">17.5%</span></div><div class="legend-item"><span class="legend-dot" style="background:#228be6"></span><span class="legend-label">ALEL</span><span class="legend-pct">11.5%</span></div><div class="legend-item"><span class="legend-dot" style="background:#4dabf7"></span><span class="legend-label">Agro Feed</span><span class="legend-pct">6.9%</span></div><div class="legend-item"><span class="legend-dot" style="background:#3b5bdb"></span><span class="legend-label">Monwara Auto Rice Mill</span><span class="legend-pct">3.6%</span></div><div class="legend-item"><span class="legend-dot" style="background:#5c7cfa"></span><span class="legend-label">Akij Cement Company Ltd</span><span class="legend-pct">2.2%</span></div><div class="legend-item"><span class="legend-dot" style="background:#0c8599"></span><span class="legend-label">Agro Breeder</span><span class="legend-pct">1.5%</span></div><div class="legend-item"><span class="legend-dot" style="background:#2f9e44"></span><span class="legend-label">Farik Auto Rice Mill</span><span class="legend-pct">0.9%</span></div><div class="legend-item"><span class="legend-dot" style="background:#e8590c"></span><span class="legend-label">Others (5 SBUs)</span><span class="legend-pct">1.4%</span></div></div></div></div></div>
+<div class="bar-chart-card"><p class="section-label">Material Type-wise Savings (BDT)</p><div class="bar-chart-total">Total <b>৳89,427,167</b></div><div class="bar-chart-list"><div class="bar-row"><div class="bar-label-line"><span class="bar-label">Raw Material - Building Cluster</span><span class="bar-value">৳41,829,281 <span class="bar-pct">(46.8%)</span></span></div><div class="bar-track"><div class="bar-fill" style="width:100.00%;background:#2f6fed;"></div></div></div><div class="bar-row"><div class="bar-label-line"><span class="bar-label">CAPX- ALEL PROJECT</span><span class="bar-value">৳10,270,616 <span class="bar-pct">(11.5%)</span></span></div><div class="bar-track"><div class="bar-fill" style="width:24.55%;background:#1c7ed6;"></div></div></div><div class="bar-row"><div class="bar-label-line"><span class="bar-label">Construction</span><span class="bar-value">৳8,082,338 <span class="bar-pct">(9.0%)</span></span></div><div class="bar-track"><div class="bar-fill" style="width:19.32%;background:#228be6;"></div></div></div><div class="bar-row"><div class="bar-label-line"><span class="bar-label">Import Capex &amp; MRO</span><span class="bar-value">৳6,894,740 <span class="bar-pct">(7.7%)</span></span></div><div class="bar-track"><div class="bar-fill" style="width:16.48%;background:#4dabf7;"></div></div></div><div class="bar-row"><div class="bar-label-line"><span class="bar-label">Packaging Material</span><span class="bar-value">৳4,860,650 <span class="bar-pct">(5.4%)</span></span></div><div class="bar-track"><div class="bar-fill" style="width:11.62%;background:#3b5bdb;"></div></div></div><div class="bar-row"><div class="bar-label-line"><span class="bar-label">Carriage Outward</span><span class="bar-value">৳4,554,177 <span class="bar-pct">(5.1%)</span></span></div><div class="bar-track"><div class="bar-fill" style="width:10.89%;background:#5c7cfa;"></div></div></div><div class="bar-row"><div class="bar-label-line"><span class="bar-label">Raw Material - Agro Feed</span><span class="bar-value">৳4,469,874 <span class="bar-pct">(5.0%)</span></span></div><div class="bar-track"><div class="bar-fill" style="width:10.69%;background:#0c8599;"></div></div></div><div class="bar-row"><div class="bar-label-line"><span class="bar-label">Paddy &amp; Rice</span><span class="bar-value">৳4,036,325 <span class="bar-pct">(4.5%)</span></span></div><div class="bar-track"><div class="bar-fill" style="width:9.65%;background:#2f9e44;"></div></div></div><div class="bar-row"><div class="bar-label-line"><span class="bar-label">Agro Breeder / Feed Local</span><span class="bar-value">৳1,372,289 <span class="bar-pct">(1.5%)</span></span></div><div class="bar-track"><div class="bar-fill" style="width:3.28%;background:#e8590c;"></div></div></div><div class="bar-row"><div class="bar-label-line"><span class="bar-label">MRO-Mechanical</span><span class="bar-value">৳1,344,312 <span class="bar-pct">(1.5%)</span></span></div><div class="bar-track"><div class="bar-fill" style="width:3.21%;background:#f08c00;"></div></div></div><div class="bar-row"><div class="bar-label-line"><span class="bar-label">MRO-Vehicle</span><span class="bar-value">৳847,100 <span class="bar-pct">(0.9%)</span></span></div><div class="bar-track"><div class="bar-fill" style="width:2.03%;background:#ae3ec9;"></div></div></div><div class="bar-row"><div class="bar-label-line"><span class="bar-label">MRO-Electrical</span><span class="bar-value">৳538,521 <span class="bar-pct">(0.6%)</span></span></div><div class="bar-track"><div class="bar-fill" style="width:1.29%;background:#495057;"></div></div></div><div class="bar-row"><div class="bar-label-line"><span class="bar-label">Indirect Procurement</span><span class="bar-value">৳279,371 <span class="bar-pct">(0.3%)</span></span></div><div class="bar-track"><div class="bar-fill" style="width:0.67%;background:#2f6fed;"></div></div></div><div class="bar-row"><div class="bar-label-line"><span class="bar-label">Asset Procurement</span><span class="bar-value">৳47,573 <span class="bar-pct">(0.1%)</span></span></div><div class="bar-track"><div class="bar-fill" style="width:0.11%;background:#1c7ed6;"></div></div></div></div></div></div>
+<div class="table-container"><table><thead><tr><th>SBU</th><th>Item Name / Type / Category</th><th>Savings Calculation Method</th><th class="num">Offer Value</th><th class="num">Negotiated Value</th><th class="num">Total Savings (BDT)</th><th>Evidence</th></tr></thead><tbody><tr><td class="sbu">Building Cluster</td><td>Raw Material Building Cluster All</td><td>Market Average vs. Purchase Average</td><td class="num"><span class="dash">—</span></td><td class="num"><span class="dash">—</span></td><td class="num savings">৳39,774,074</td><td class="evidence"><a href="https://docs.google.com/spreadsheets/d/1mMj3OyaH95K9ZrvXqEfaazSU6LIz4rn6eoiOjfGCigY/edit?usp=sharing" target="_blank" rel="noopener">View source</a></td></tr><tr><td class="sbu">ALEL</td><td>FORCE VENTILATION MOTOR &amp; SPARE PART</td><td>SUPPLIER HS CODE VS. DECLARED HS CODE</td><td class="num">৳10,373,001</td><td class="num">৳102,385</td><td class="num savings">৳10,270,616</td><td class="evidence"><span class="dash">—</span></td></tr><tr><td class="sbu">Group</td><td>Multiple PO Savings</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳148,467,048</td><td class="num">৳141,624,522</td><td class="num savings">৳6,842,526</td><td class="evidence">MRO CS Approval- ARL</td></tr><tr><td class="sbu">Building Cluster</td><td>CNC Lathe Machine</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳446,000</td><td class="num">৳410,500</td><td class="num savings">৳4,970,000</td><td class="evidence">Saving Report-Import MRO-August</td></tr><tr><td class="sbu">Group</td><td>Packaging Material Empty Cement Bag-PCC(Stitch)</td><td>Last Purchase Price vs. Current</td><td class="num"><span class="dash">—</span></td><td class="num"><span class="dash">—</span></td><td class="num savings">৳4,860,650</td><td class="evidence">Savings Target SCM</td></tr><tr><td class="sbu">Monwara Auto Rice Mill</td><td>Katari &amp; Miniket Paddy (new &amp; tender), Sufollota Paddy, Katari Najir Rice</td><td>Benchmark Savings</td><td class="num"><span class="dash">—</span></td><td class="num"><span class="dash">—</span></td><td class="num savings">৳3,223,583</td><td class="evidence"><a href="https://docs.google.com/spreadsheets/d/1mJMPdtcPgSQh73LnQUa0DtDq6cAfqk9Q2vs9-GHyEzk/edit?gid=353620891#gid=353620891" target="_blank" rel="noopener">View source</a></td></tr><tr><td class="sbu">Agro Feed</td><td>Broken Rice</td><td>Market Average vs. Purchase Average</td><td class="num">৳31.50</td><td class="num">৳31.00</td><td class="num savings">৳2,900,978</td><td class="evidence">Total Broken RicePurchase quantity-5801956 Kg</td></tr><tr><td class="sbu">Building Cluster</td><td>Raw Material Building Cluster All _ Cotton</td><td>Market Average vs. Purchase Average</td><td class="num"><span class="dash">—</span></td><td class="num"><span class="dash">—</span></td><td class="num savings">৳2,055,207</td><td class="evidence"><a href="https://docs.google.com/spreadsheets/d/1mMj3OyaH95K9ZrvXqEfaazSU6LIz4rn6eoiOjfGCigY/edit?usp=sharing" target="_blank" rel="noopener">View source</a></td></tr><tr><td class="sbu">Akij Cement Company Ltd</td><td>Carriage Outward</td><td>Cost Avoidance &amp; Logistics Optimisation</td><td class="num"><span class="dash">—</span></td><td class="num"><span class="dash">—</span></td><td class="num savings">৳2,003,176</td><td class="evidence"><a href="https://docs.google.com/spreadsheets/d/1hw5KIa7QYnkXrbFd6OzVbXXYf0XeJCgiAQqhbPViK_Y/edit?gid=1788806617#gid=1788806617" target="_blank" rel="noopener">View source</a></td></tr><tr><td class="sbu">Agro Feed</td><td>Carriage Outward</td><td>Cost Avoidance &amp; Logistics Optimisation</td><td class="num">৳17,524,506</td><td class="num">৳15,888,357</td><td class="num savings">৳1,636,149</td><td class="evidence"><a href="https://docs.google.com/spreadsheets/d/1yXuVpVfNIF8u-kz2SzUjHUrZxCXr36AsvkbtoaWrBSE/edit?gid=1621322501#gid=1621322501" target="_blank" rel="noopener">View source</a></td></tr><tr><td class="sbu">Group</td><td>Multiple PO Savings</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳31,870,051</td><td class="num">৳30,630,239</td><td class="num savings">৳1,239,812</td><td class="evidence">PO Status &amp; Saving List for Civil</td></tr><tr><td class="sbu">Building Cluster</td><td>Air Compressor</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳39,700</td><td class="num">৳29,800</td><td class="num savings">৳1,227,600</td><td class="evidence">Saving Report-Import MRO-August</td></tr><tr><td class="sbu">Agro Feed</td><td>DDGS - Corn</td><td>Multi-Baseline Methodology</td><td class="num">৳287.03</td><td class="num">৳285.00</td><td class="num savings">৳1,008,170</td><td class="evidence">Email confirmation</td></tr><tr><td class="sbu">Farik Auto Rice Mill</td><td>Katari &amp; Miniket Paddy, Food Godown Rice</td><td>Benchmark Savings</td><td class="num"><span class="dash">—</span></td><td class="num"><span class="dash">—</span></td><td class="num savings">৳812,742</td><td class="evidence"><a href="https://docs.google.com/spreadsheets/d/1mJMPdtcPgSQh73LnQUa0DtDq6cAfqk9Q2vs9-GHyEzk/edit?gid=353620891#gid=353620891" target="_blank" rel="noopener">View source</a></td></tr><tr><td class="sbu">Group</td><td>Multiple PO Savings</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳3,649,393</td><td class="num">৳2,960,217</td><td class="num savings">৳689,176</td><td class="evidence">MRO CS Approval- ARL</td></tr><tr><td class="sbu">Agro Breeder</td><td>Broiler Breeder</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳8,945,276</td><td class="num">৳8,438,940</td><td class="num savings">৳506,336</td><td class="evidence"><a href="https://drive.google.com/drive/folders/1sbjrZVp7orqZazqz73FaWt-wA2ETrDuV" target="_blank" rel="noopener">View source</a></td></tr><tr><td class="sbu">Group</td><td>Multiple PO Savings</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳15,443,200</td><td class="num">৳14,937,700</td><td class="num savings">৳505,500</td><td class="evidence">MRO CS Approval- ARL</td></tr><tr><td class="sbu">Building Cluster</td><td>Excavator Spare Parts</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳31,985</td><td class="num">৳28,000</td><td class="num savings">৳494,140</td><td class="evidence">Saving Report-Import MRO-August</td></tr><tr><td class="sbu">Akij Automobile (Tyre)</td><td>Carriage Outward</td><td>Cost Avoidance &amp; Logistics Optimisation</td><td class="num">৳786,106</td><td class="num">৳398,472</td><td class="num savings">৳387,634</td><td class="evidence"><a href="https://docs.google.com/spreadsheets/d/1yXuVpVfNIF8u-kz2SzUjHUrZxCXr36AsvkbtoaWrBSE/edit?gid=1621322501#gid=1621322501" target="_blank" rel="noopener">View source</a></td></tr><tr><td class="sbu">Agro Breeder</td><td>Broiler Breeder Grower Feed</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳6,233,436</td><td class="num">৳5,880,600</td><td class="num savings">৳352,836</td><td class="evidence"><a href="https://drive.google.com/drive/folders/1sbjrZVp7orqZazqz73FaWt-wA2ETrDuV" target="_blank" rel="noopener">View source</a></td></tr><tr><td class="sbu">Group</td><td>Multiple PO Savings</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳8,349,456</td><td class="num">৳8,007,765</td><td class="num savings">৳341,691</td><td class="evidence">MRO CS Approval- ARL</td></tr><tr><td class="sbu">Group</td><td>Multiple PO Savings</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳10,124,800</td><td class="num">৳9,783,200</td><td class="num savings">৳341,600</td><td class="evidence">MRO CS Approval- ARL</td></tr><tr><td class="sbu">Akij Essential Ltd</td><td>Carriage Outward</td><td>Cost Avoidance &amp; Logistics Optimisation</td><td class="num">৳5,880,644</td><td class="num">৳5,580,731</td><td class="num savings">৳299,913</td><td class="evidence"><a href="https://docs.google.com/spreadsheets/d/1yXuVpVfNIF8u-kz2SzUjHUrZxCXr36AsvkbtoaWrBSE/edit?gid=1621322501#gid=1621322501" target="_blank" rel="noopener">View source</a></td></tr><tr><td class="sbu">Group</td><td>Multiple PO Savings</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳3,075,413</td><td class="num">৳2,784,110</td><td class="num savings">৳291,303</td><td class="evidence">MRO CS Approval- ARL</td></tr><tr><td class="sbu">Group</td><td>Multiple PO Savings</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳3,330,000</td><td class="num">৳3,100,000</td><td class="num savings">৳230,000</td><td class="evidence">MRO CS Approval- ARL</td></tr><tr><td class="sbu">Building Cluster</td><td>OPG (Dental X Ray Machine)</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳14,950</td><td class="num">৳13,500</td><td class="num savings">৳203,000</td><td class="evidence">Saving Report-Import MRO-August</td></tr><tr><td class="sbu">Agro Feed</td><td>Insect Meal</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳6,846,640</td><td class="num">৳6,668,032</td><td class="num savings">৳178,608</td><td class="evidence">Total Insect Meal Purchase quantity-29768 Kg</td></tr><tr><td class="sbu">Agro Feed</td><td>DL-Methionine (Powder)-Evonik</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳14,029,500</td><td class="num">৳13,865,000</td><td class="num savings">৳164,500</td><td class="evidence">Total DL-Metheonine Purchase quantity-23500 Kg</td></tr><tr><td class="sbu">Group</td><td>Multiple PO Savings</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳1,306,075</td><td class="num">৳1,145,125</td><td class="num savings">৳160,950</td><td class="evidence">MRO CS Approval- ARL</td></tr><tr><td class="sbu">Agro Breeder</td><td>Color PS Breeder-</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳2,817,226</td><td class="num">৳2,657,760</td><td class="num savings">৳159,466</td><td class="evidence"><a href="https://drive.google.com/drive/folders/1sbjrZVp7orqZazqz73FaWt-wA2ETrDuV" target="_blank" rel="noopener">View source</a></td></tr><tr><td class="sbu">Consumer Electronics</td><td>Haier Products for Showroom</td><td>Contract / Negotiation Discount</td><td class="num">৳2,252,282</td><td class="num">৳2,124,795</td><td class="num savings">৳127,487</td><td class="evidence">Contract purchase</td></tr><tr><td class="sbu">Akij Light Engineering Ltd</td><td>Carriage Outward</td><td>Cost Avoidance &amp; Logistics Optimisation</td><td class="num">৳282,000</td><td class="num">৳165,425</td><td class="num savings">৳116,575</td><td class="evidence"><a href="https://docs.google.com/spreadsheets/d/1yXuVpVfNIF8u-kz2SzUjHUrZxCXr36AsvkbtoaWrBSE/edit?gid=1621322501#gid=1621322501" target="_blank" rel="noopener">View source</a></td></tr><tr><td class="sbu">Agro Feed</td><td>Bakery Meal</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳5,422,395</td><td class="num">৳5,307,737</td><td class="num savings">৳114,658</td><td class="evidence">Total Bakery Meal Purchase quantity-163315 Kg</td></tr><tr><td class="sbu">Akij Ispat</td><td>Carriage Outward</td><td>Cost Avoidance &amp; Logistics Optimisation</td><td class="num">৳1,882,230</td><td class="num">৳1,771,500</td><td class="num savings">৳110,730</td><td class="evidence"><a href="https://docs.google.com/spreadsheets/d/1yXuVpVfNIF8u-kz2SzUjHUrZxCXr36AsvkbtoaWrBSE/edit?gid=1621322501#gid=1621322501" target="_blank" rel="noopener">View source</a></td></tr><tr><td class="sbu">Agro Feed</td><td>E.C.O.Trace Special</td><td>Multi-Baseline Methodology</td><td class="num">৳3,150</td><td class="num">৳3,120</td><td class="num savings">৳102,960</td><td class="evidence">Email confirmation</td></tr><tr><td class="sbu">Consumer Electronics</td><td>Samsung Refrigerator purchase for Showroom</td><td>Contract / Negotiation Discount</td><td class="num">৳2,040,990</td><td class="num">৳1,943,800</td><td class="num savings">৳97,190</td><td class="evidence">Contract purchase</td></tr><tr><td class="sbu">Group</td><td>Multiple PO Savings</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳327,175</td><td class="num">৳240,907</td><td class="num savings">৳86,268</td><td class="evidence">MRO CS Approval- ARL</td></tr><tr><td class="sbu">Group</td><td>Multiple PO Savings</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳1,606,410</td><td class="num">৳1,522,965</td><td class="num savings">৳83,445</td><td class="evidence">MRO CS Approval- ARL</td></tr><tr><td class="sbu">Agro Breeder</td><td>MS Angle</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳305,500</td><td class="num">৳236,800</td><td class="num savings">৳68,700</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Agro Breeder</td><td>CI Sheet, Ridge Cap / Ridge Cover</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳261,225</td><td class="num">৳193,500</td><td class="num savings">৳67,725</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Agro Breeder</td><td>Flexible cables</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳307,886</td><td class="num">৳246,309</td><td class="num savings">৳61,577</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Agro Breeder</td><td>Atop Tush</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳412,500</td><td class="num">৳362,500</td><td class="num savings">৳50,000</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Consumer Electronics</td><td>LCAC for Mirpur Showroom</td><td>Contract / Negotiation Discount</td><td class="num">৳716,840</td><td class="num">৳676,260</td><td class="num savings">৳40,580</td><td class="evidence">Contract purchase</td></tr><tr><td class="sbu">Consumer Electronics</td><td>Haier Products for Showroom</td><td>Contract / Negotiation Discount</td><td class="num">৳716,728</td><td class="num">৳676,159</td><td class="num savings">৳40,570</td><td class="evidence">Contract purchase</td></tr><tr><td class="sbu">Agro Feed</td><td>Empty Plastic drum 220 KG</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳116,000</td><td class="num">৳80,000</td><td class="num savings">৳36,000</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Agro Breeder</td><td>Generator Coolant,Mobil, 15w-40</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳78,400</td><td class="num">৳59,550</td><td class="num savings">৳18,850</td><td class="evidence"><a href="https://drive.google.com/drive/folders/1sbjrZVp7orqZazqz73FaWt-wA2ETrDuV" target="_blank" rel="noopener">View source</a></td></tr><tr><td class="sbu">Consumer Electronics</td><td>Haier Adjustment products</td><td>Contract / Negotiation Discount</td><td class="num">৳234,820</td><td class="num">৳220,695</td><td class="num savings">৳14,125</td><td class="evidence">Contract purchase</td></tr><tr><td class="sbu">Agro Breeder</td><td>Lub Oil 15W40</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳36,250</td><td class="num">৳28,000</td><td class="num savings">৳8,250</td><td class="evidence"><a href="https://drive.google.com/drive/folders/1sbjrZVp7orqZazqz73FaWt-wA2ETrDuV" target="_blank" rel="noopener">View source</a></td></tr><tr><td class="sbu">Consumer Electronics</td><td>IPS for Stadium Showroom</td><td>Contract / Negotiation Discount</td><td class="num">৳90,362</td><td class="num">৳83,368</td><td class="num savings">৳6,994</td><td class="evidence">Negotiation purchase</td></tr><tr><td class="sbu">Agro Breeder</td><td>Fuel Filter 4587258  Oil Filter</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳25,000</td><td class="num">৳18,500</td><td class="num savings">৳6,500</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Agro Feed</td><td>Atop Tush</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳75,000</td><td class="num">৳69,000</td><td class="num savings">৳6,000</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Agro Breeder</td><td>Cord Rope (Thickness 4 MM)</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳23,000</td><td class="num">৳19,000</td><td class="num savings">৳4,000</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Agro Breeder</td><td>Cutting Disk 4 Inch</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳10,000</td><td class="num">৳6,400</td><td class="num savings">৳3,600</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Agro Breeder</td><td>Antivirkon&#x27;s / Virkon&#x27;s</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳44,733</td><td class="num">৳41,288</td><td class="num savings">৳3,445</td><td class="evidence"><a href="https://drive.google.com/drive/folders/1sbjrZVp7orqZazqz73FaWt-wA2ETrDuV" target="_blank" rel="noopener">View source</a></td></tr><tr><td class="sbu">Agro Breeder</td><td>Circuit breaker</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳12,000</td><td class="num">৳8,880</td><td class="num savings">৳3,120</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Agro Breeder</td><td>Anthelmintic (Levamisole)</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳63,600</td><td class="num">৳61,056</td><td class="num savings">৳2,544</td><td class="evidence"><a href="https://drive.google.com/drive/folders/1sbjrZVp7orqZazqz73FaWt-wA2ETrDuV" target="_blank" rel="noopener">View source</a></td></tr><tr><td class="sbu">Agro Breeder</td><td>LED Rechargeable Torch Light,Metal body-</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳9,000</td><td class="num">৳6,500</td><td class="num savings">৳2,500</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Agro Breeder</td><td>Water separator Filter</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳28,420</td><td class="num">৳26,000</td><td class="num savings">৳2,420</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Agro Breeder</td><td>Lube Oil</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳31,500</td><td class="num">৳29,250</td><td class="num savings">৳2,250</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Agro Breeder</td><td>Spade With Handle</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳6,000</td><td class="num">৳3,900</td><td class="num savings">৳2,100</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Agro Breeder</td><td>Plastics Rope</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳24,000</td><td class="num">৳22,000</td><td class="num savings">৳2,000</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Agro Breeder</td><td>Generator Oil filter</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳6,500</td><td class="num">৳5,880</td><td class="num savings">৳620</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Agro Breeder</td><td>Plastic Rope</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳6,000</td><td class="num">৳5,500</td><td class="num savings">৳500</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Agro Breeder</td><td>Rivet Gun Mechine</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳9,200</td><td class="num">৳8,700</td><td class="num savings">৳500</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Agro Breeder</td><td>Timer Relay, Star Screw, PVC welding
+Helmet, e.t.c</td><td>Offer vs. Negotiated PO Price</td><td class="num">৳7,450</td><td class="num">৳7,000</td><td class="num savings">৳450</td><td class="evidence">ERFQ</td></tr><tr><td class="sbu">Group</td><td>Multiple PO Savings</td><td>Offer vs. Negotiated PO Price</td><td class="num"><span class="dash">—</span></td><td class="num"><span class="dash">—</span></td><td class="num savings">৳0</td><td class="evidence">MRO CS Approval- ARL</td></tr></tbody><tfoot><tr><td colspan="5">Total</td><td class="num">৳89,427,167</td><td></td></tr></tfoot></table></div>
+<p class="footnote"><b>Validation flag:</b> FORCE VENTILATION MOTOR &amp; SPARE PART (PO-ALEL-JUN26-61, MD. NIAJ MOURSHED) contributes ৳10,270,616 (11.5% of the total) under “SUPPLIER HS CODE VS. DECLARED HS CODE”. It is included so the dashboard ties to the Savings Summary total of ৳89,427,167, but it is a customs HS-code classification saving rather than a negotiated price reduction — recommend Finance/Customs sign-off before it is reported as realised savings. Zero-value rows are omitted. Line items are shown largest first.</p>
+</div></body></html>
